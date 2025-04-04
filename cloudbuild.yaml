@@ -47,8 +47,7 @@ options:
     - 'run'
     - 'deploy'
     - 'hola-mundo-service' # El nombre que le darás a tu servicio Cloud Run
-    - '--image'
-    # La imagen exacta que acabamos de subir a Artifact Registry
+    - '--image' # La imagen exacta que acabamos de subir a Artifact Registry
     - 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA'
     - '--region'
     - 'us-central1' # La región donde quieres desplegar el servicio Cloud Run
