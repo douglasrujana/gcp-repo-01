@@ -4,17 +4,17 @@ steps:
   args:
   - 'build'
   - '-t'
-  - 'gcr.io/gcp-devops-454205/github.com/douglasrujana/gcp-repo-01:$COMMIT_SHA'
+  - 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA'
   - '.'
 
 # Paso 2: Subir la imagen a GCR (o Artifact Registry si prefieres)
 # Asegúrate que la cuenta de servicio personalizada tenga permisos para esto
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/gcp-devops-454205/github.com/douglasrujana/gcp-repo-01:$COMMIT_SHA']
+  args: ['push', 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA']
 
 # Especifica las imágenes resultantes
 images:
-- 'gcr.io/gcp-devops-454205/github.com/douglasrujana/gcp-repo-01:$COMMIT_SHA'
+- 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA'
 
 # === LA CLAVE: Configuración de Logging ===
 options:
