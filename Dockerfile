@@ -1,26 +1,24 @@
-# Use the official Python image as the base image
+# Dockerfile
+# Usa una imagen base de Python ligera
 FROM python:3.9-slim
 
-# Set the working directory in the container
-WORKDIR /dk_app_hw
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
 
-# Copy the current directory contents into the container
-COPY main.py /dk_app_hw/main.py
+# Copia el archivo de requerimientos primero (aprovecha el caché de Docker)
+COPY requirements.txt requirements.txt
 
-# Install the required Python packages
-RUN pip install --no-cache-dir flask gunicorn
+# Instala las dependencias
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port the app runs on
+# Copia el resto del código de la aplicación
+COPY . .
+
+# Expón el puerto en el que Gunicorn escuchará (Flask por defecto es 5000, Gunicorn a menudo 8000 o 5000)
+# Gunicorn por defecto usa 8000, pero podemos decirle que use otro. Usemos 8080 como ejemplo.
 EXPOSE 8080
 
-# Set the environment variable for Flask
-ENV FLASK_APP=main.py
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV PORT=8080
-
-# Command to run the application
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "main:app"]
-# CMD ["python3", "/dk_app_hw/main.py"]
-
-# End of file
-
+# Comando para ejecutar la aplicación usando Gunicorn
+# Escucha en todas las interfaces (0.0.0.0) en el puerto 8080
+# 'main:app' le dice a Gunicorn que busque la instancia 'app' en el archivo 'main.py'
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "main:app"]

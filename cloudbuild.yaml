@@ -1,21 +1,40 @@
 steps:
-# Paso 1: Construir la imagen Docker (igual que antes)
+# === PASO 1: Ejecutar Pruebas con Pytest ===
+# Si este paso falla, el pipeline se detiene.
+- name: 'python:3.9-slim' # Usamos una imagen de Python
+  entrypoint: 'bash'      # Para ejecutar comandos shell
+  args:
+  - '-c'
+  - |
+    echo "--- Instalando dependencias para pruebas ---" && \
+    pip install -r requirements.txt && \
+    echo "--- Ejecutando pruebas (pytest) ---" && \
+    python -m pytest tests/
+    # Instala dependencias y corre pytest en el directorio ./tests/
+
+# === PASO 2: Construir la imagen Docker ===
+# Solo se ejecuta si las pruebas (paso anterior) fueron exitosas.
+# Usando la ruta original del archivo .bck
 - name: 'gcr.io/cloud-builders/docker'
   args:
   - 'build'
   - '-t'
+  # Ruta original del .bck
   - 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA'
   - '.'
 
-# Paso 2: Subir la imagen a GCR (o Artifact Registry si prefieres)
-# Asegúrate que la cuenta de servicio personalizada tenga permisos para esto
+# === PASO 3: Subir (push) la imagen a Artifact Registry ===
+# Solo se ejecuta si el build (paso anterior) fue exitoso.
+# Usando la ruta original del .bck
 - name: 'gcr.io/cloud-builders/docker'
+  # Usa la misma ruta original
   args: ['push', 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA']
 
-# Especifica las imágenes resultantes
+# Especifica la imagen resultante usando la ruta original
 images:
+# Usa la misma ruta original
 - 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA'
 
-# === LA CLAVE: Configuración de Logging ===
+# Mantenemos la opción de logging
 options:
-  logging: CLOUD_LOGGING_ONLY # Opciones: GCS_ONLY, CLOUD_LOGGING_ONLY, NONE, DEFAULT
+  logging: CLOUD_LOGGING_ONLY
