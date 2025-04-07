@@ -15,4 +15,4 @@ def test_hello_world_route(client):
     """Prueba que la ruta principal '/' funciona y devuelve 'Hola Mundo'."""
     response = client.get('/')
     assert response.status_code == 200 # Verifica que la respuesta es OK
-    assert response.data.decode('utf-8') == 'Hola Mundo v1' # Verifica el contenido
+    assert response.data.decode('utf-8') == 'Hola Mundo v2' # Verifica el contenido
