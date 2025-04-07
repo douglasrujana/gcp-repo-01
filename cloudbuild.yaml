@@ -27,17 +27,15 @@ steps:
 # Solo se ejecuta si el build (paso anterior) fue exitoso.
 # Usando la ruta original del .bck
 - name: 'gcr.io/cloud-builders/docker'
-  # Usa la misma ruta original
-  args: ['push', 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA']
-
-# Especifica la imagen resultante usando la ruta original
-images:
-# Usa la misma ruta original
-- 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA'
-
+  args:
+   - 'push'
+   - 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA'
+   # Especifica la imagen resultante usando la ruta original
+- images:
+   - 'us-central1-docker.pkg.dev/gcp-devops-454205/devops-images/gcp-repo-01:$COMMIT_SHA'
 # Mantenemos la opción de logging
-options:
-  logging: CLOUD_LOGGING_ONLY
+- options:
+   logging: CLOUD_LOGGING_ONLY
 
 # === PASO 4: Desplegar a Cloud Run ===
 # Solo se ejecuta si el push (paso anterior) fue exitoso.
